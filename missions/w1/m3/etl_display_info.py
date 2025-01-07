@@ -1,10 +1,12 @@
 import pandas as pd
 
-def display_info(df: pd.DataFrame):
+def display_info_with_pandas(df: pd.DataFrame):
     print("\033[31m--- Country have more than 100B GDP ---\033[0m")
     pd.options.display.float_format = "{:.2f}".format  # 소수점 둘째자리 까지 프린트
     pd.options.display.max_rows = 100  # 최대 row 개수 조정
-    print(df[df['GDP'] >= 100])
+    print(f'{"RANK":4} | {"COUNTRY":30} | {"GDP":8} | {"REGION":8}')
+    for row in df[df['GDP'] >= 100].itertuples():
+        print(f'{int(row.Index) + 1:4} | {row.country:30} | {row.GDP:8.2f} | {row.region}')
     print()
     print("\033[31m--- Each region's mean GDP of top 5 country ---\033[0m")
     for idx, region in enumerate(df['region'].unique()):

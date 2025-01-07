@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import json
 from etl_logger import logger
-from etl_display_info import display_info
+from etl_display_info import display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
@@ -51,7 +51,7 @@ def transform():
 # Load
 def load(df: pd.DataFrame):
 	logger('Load', 'start')
-	display_info(df)
+	display_info_with_pandas(df)
 	logger('Load', 'done')
 
 if __name__ == '__main__':

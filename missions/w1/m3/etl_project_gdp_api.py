@@ -2,7 +2,7 @@ import json
 import requests
 import pandas as pd
 from etl_logger import logger
-from etl_display_info import display_info
+from etl_display_info import display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
@@ -34,13 +34,14 @@ def transform():
 	transformed_df.rename(columns={'2025': 'GDP', 'label': 'country'}, inplace=True)
 	transformed_df.dropna(subset=['country', 'region'], inplace=True)
 	transformed_df.sort_values(by='GDP', ascending=False, inplace=True)
+	transformed_df.reset_index(drop=True, inplace=True)
 	logger('Transform-API', 'done')
 	return transformed_df
 
 # Load
 def load(df: pd.DataFrame):
 	logger('Load-API', 'start')
-	display_info(df)
+	display_info_with_pandas(df)
 	logger('Load-API', 'done')
 
 if __name__ == '__main__':
