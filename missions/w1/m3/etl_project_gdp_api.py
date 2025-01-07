@@ -2,7 +2,7 @@ import json
 import requests
 import pandas as pd
 from etl_logger import logger
-from etl_display_info import display_info_with_pandas
+from etl_project_util import save_raw_data_with_backup, display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
@@ -15,8 +15,8 @@ def extract():
 		country_url = "https://www.imf.org/external/datamapper/api/v1/countries"
 		ngdpd_response = requests.get(ngdpd_url)
 		country_response = requests.get(country_url)
-		with open(JSON_FILE, 'w') as f:
-			json.dump({'ngdpd':ngdpd_response.json(), 'country':country_response.json()}, f)
+		data = {'ngdpd':ngdpd_response.json(), 'country':country_response.json()}
+		save_raw_data_with_backup(JSON_FILE, data)
 		logger('Extract-API', 'done')
 	except Exception as e:
 		logger('Extract-API', 'ERROR: ' + str(e))
@@ -24,10 +24,10 @@ def extract():
 
 # Transform data extracted with imf api and return dataframe
 # DataFrame columns = GDP, country, region
-def transform():
+def transform(json_file: str = JSON_FILE):
 	try:
 		logger('Transform-API', 'start')
-		with open(JSON_FILE, 'r') as f: # get extracted data by json
+		with open(json_file, 'r') as f: # get extracted data by json
 			data = json.load(f)
 		gdp_df = pd.DataFrame(data['ngdpd']['values']['NGDPD']).T
 		country_df = pd.DataFrame(data['country']['countries']).T

@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import json
 from etl_logger import logger
-from etl_display_info import display_info_with_pandas
+from etl_project_util import save_raw_data_with_backup, display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
@@ -16,8 +16,8 @@ def extract():
 		logger('extract', 'start')
 		response = requests.get(url)
 		html = response.text
-		with open(JSON_FILE, 'w') as f:
-			json.dump({'raw_data':html}, f)
+		data = {'raw_data':html}
+		save_raw_data_with_backup(JSON_FILE, data)
 		logger('extract', 'done')
 	except Exception as e:
 		logger('extract', 'ERROR: ' + str(e))

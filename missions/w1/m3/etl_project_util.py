@@ -1,3 +1,6 @@
+import os
+import json
+from datetime import datetime
 import pandas as pd
 import sqlite3
 from etl_logger import logger
@@ -21,11 +24,11 @@ def display_info_with_pandas(df: pd.DataFrame):
         logger('Display-Info', 'ERROR: ' + str(e))
         raise e
 
-def display_info_with_sqlite(sql_path: str):
+def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'):
     try:
         conn = sqlite3.connect(sql_path)
         cursor = conn.cursor()
-        query_100B = """SELECT * FROM Countries_by_GDP WHERE GDP_USD_billion >= 100"""
+        query_100B = f"""SELECT * FROM {table_name} WHERE GDP_USD_billion >= 100"""
         cursor.execute(query_100B)
         result_100B = cursor.fetchall()
         print("\033[31m--- Country have more than 100B GDP ---\033[0m")
@@ -33,12 +36,12 @@ def display_info_with_sqlite(sql_path: str):
         for idx, country, gdp, region in result_100B:
             print(f'{int(idx) + 1:4} | {country:30} | {gdp:8.2f} | {region}')
         print()
-        query_region_list = """SELECT DISTINCT Region FROM Countries_by_GDP WHERE Region IS NOT NULL"""
+        query_region_list = f"""SELECT DISTINCT Region FROM {table_name} WHERE Region IS NOT NULL"""
         cursor.execute(query_region_list)
         result_region_list = cursor.fetchall()
-        query_region_top5_mean = """SELECT Region, AVG(GDP_USD_billion) AS Mean_GDP_USD_billion
+        query_region_top5_mean = f"""SELECT Region, AVG(GDP_USD_billion) AS Mean_GDP_USD_billion
                                     FROM (
-                                    SELECT Region, GDP_USD_billion FROM Countries_by_GDP
+                                    SELECT Region, GDP_USD_billion FROM {table_name}
                                     WHERE Region == ?
                                     ORDER BY GDP_USD_billion DESC
                                     LIMIT 5
@@ -53,5 +56,18 @@ def display_info_with_sqlite(sql_path: str):
         logger('Display-Info-SQL', 'ERROR: ' + str(e))
         raise e
 
-if __name__ == '__main__':
-    display_info_with_sqlite('/Users/admin/HMG_5th/missions/w1/data/World_Economies.db')
+def save_raw_data_with_backup(file_name, data):
+	if os.path.exists(file_name):  # If file exists
+		old_data = {}
+		with open(file_name, 'r') as f:
+			old_data = json.load(f)
+		if old_data == data:  # compare old data and new data
+			logger('Extract-Save', 'No update in raw data')
+		else:  # if old data and new data are different, rename old data.
+			os.rename(file_name, file_name.split('.')[0] + datetime.now().strftime('%Y%m%d%H%M%S') + '.json')
+			logger('Extract-Save', 'Update raw data')
+			with open(file_name, 'w') as f:
+				json.dump(data, f)
+	else: # If file not exists, save raw data.
+		with open(file_name, 'w') as f:
+			json.dump(data, f)
