@@ -8,32 +8,36 @@ LOG_FILE = 'etl_project_log.txt'
 JSON_FILE = 'Countries_by_GDP.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
 
-# log etl step start / end
-def logger(step: str, start: bool):
+# log etl step with msg
+def logger(step: str, msg: str):
 	with open(LOG_FILE, 'a') as file:
 		now = datetime.now()
 		timestamp = now.strftime("%Y-%B-%d-%H-%M-%S") #formatting the timestamp
-		file.write(f'{timestamp}, [{step.upper()}] {'start' if start else 'done'}\n')
+		file.write(f'{timestamp}, [{step.upper()}] {msg}\n')
 
-def extract_gdp_dict():
+
+def extract():
 	gdp_dict = {}
 	url = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
-	logger('extract', start=True)
+	logger('extract', 'start')
 	response = requests.get(url)
 	html = response.text
 	with open(JSON_FILE, 'w') as f:
 		json.dump({'raw_data':html}, f)
-	logger('extract', start=False)
-	return gdp_dict
+	logger('extract', 'done')
 
 
-def transform_gdp_dict():
-	logger('Transform', start=True)
+def transform():
+	logger('Transform', 'start')
 	data = {}
 	gdp_dict = {}
 	with open(JSON_FILE, 'r') as f:
 		data = json.load(f)
 	soup = BeautifulSoup(data['raw_data'], 'html.parser')
+	table_soup = soup.select('table.wikitable')
+	if len(table_soup) < 1:
+		logger('Transform', 'ERROR: No table found')
+		raise
 	table_soup = soup.find('table', {'class': 'wikitable'}) # Find a table with class 'wikitable'
 	rows = table_soup.find_all('tr') # Get all rows in the table
 	for row in rows:
@@ -47,11 +51,11 @@ def transform_gdp_dict():
 	region_df = pd.read_csv(REGION_CSV_PATH)
 	region_df = pd.DataFrame({'Country' : region_df['name'], 'Region':region_df['region']}) # Get region info in csv file
 	merged_gdp_df = pd.merge(gdp_df, region_df, how='left', on='Country') # Join dataframes on country column
-	logger('Transform', start=False)
+	logger('Transform', 'done')
 	return merged_gdp_df
 
-def load_gdp_df(gdp_df: pd.DataFrame):
-	logger('Load', start=True)
+def load(gdp_df: pd.DataFrame):
+	logger('Load', 'start')
 	print("\033[31m--- Country have more than 100B GDP ---\033[0m")
 	pd.options.display.float_format = "{:.2f}".format # 소수점 둘째자리 까지 프린트
 	pd.options.display.max_rows = 100 # 최대 row 개수 조정
@@ -61,8 +65,8 @@ def load_gdp_df(gdp_df: pd.DataFrame):
 	for idx, region in enumerate(gdp_df['Region'].unique()):
 		if pd.notna(region):
 			print(f"\033[{32+idx}m{region.upper():8}\033[0m : {gdp_df[gdp_df['Region'] == region].sort_values(ascending=False, by='GDP').head(5)['GDP'].mean():.2f}")
-	logger('Load', start=False)
+	logger('Load', 'done')
 
 if __name__ == '__main__':
-	extract_gdp_dict()
-	load_gdp_df(transform_gdp_dict())
+	extract()
+	load(transform())
