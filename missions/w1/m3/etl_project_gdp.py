@@ -10,7 +10,6 @@ REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
 # Extract gdp information with web scrapping
 def extract():
 	try:
-		gdp_dict = {}
 		url = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
 		logger('extract', 'start')
 		response = requests.get(url)
