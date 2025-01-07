@@ -3,7 +3,8 @@ import json
 from datetime import datetime
 import pandas as pd
 import sqlite3
-from etl_logger import logger
+
+LOG_FILE = 'etl_project_log.txt'
 
 def display_info_with_pandas(df: pd.DataFrame):
     try:
@@ -57,17 +58,24 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
         raise e
 
 def save_raw_data_with_backup(file_name, data):
-	if os.path.exists(file_name):  # If file exists
-		old_data = {}
-		with open(file_name, 'r') as f:
-			old_data = json.load(f)
-		if old_data == data:  # compare old data and new data
-			logger('Extract-Save', 'No update in raw data')
-		else:  # if old data and new data are different, rename old data.
-			os.rename(file_name, file_name.split('.')[0] + datetime.now().strftime('%Y%m%d%H%M%S') + '.json')
-			logger('Extract-Save', 'Update raw data')
-			with open(file_name, 'w') as f:
-				json.dump(data, f)
-	else: # If file not exists, save raw data.
-		with open(file_name, 'w') as f:
-			json.dump(data, f)
+    if os.path.exists(file_name):  # If file exists
+        old_data = {}
+        with open(file_name, 'r') as f:
+            old_data = json.load(f)
+        if old_data == data:  # compare old data and new data
+            logger('Extract-Save', 'No update in raw data')
+        else: # if old data and new data are different, rename old data.
+            os.rename(file_name, file_name.split('.')[0] + datetime.now().strftime('%Y%m%d%H%M%S') + '.json')
+            logger('Extract-Save', 'Update raw data')
+            with open(file_name, 'w') as f:
+                json.dump(data, f)
+    else: # If file not exists, save raw data.
+        with open(file_name, 'w') as f:
+            json.dump(data, f)
+
+# log etl step with msg
+def logger(step: str, msg: str):
+    with open(LOG_FILE, 'a') as file:
+        now = datetime.now()
+        timestamp = now.strftime("%Y-%B-%d-%H-%M-%S") #formatting the timestamp
+        file.write(f'{timestamp}, [{step.upper()}] {msg}\n')
