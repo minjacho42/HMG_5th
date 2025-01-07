@@ -77,5 +77,5 @@ def save_raw_data_with_backup(file_name, data):
 def logger(step: str, msg: str):
     with open(LOG_FILE, 'a') as file:
         now = datetime.now()
-        timestamp = now.strftime("%Y-%B-%d-%H-%M-%S") #formatting the timestamp
+        timestamp = now.strftime("%Y-%B-%d %H:%M:%S") #formatting the timestamp
         file.write(f'{timestamp}, [{step.upper()}] {msg}\n')
