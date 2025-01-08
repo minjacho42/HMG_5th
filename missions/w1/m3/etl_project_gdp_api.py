@@ -37,8 +37,7 @@ def transform(json_file: str = JSON_FILE):
 		country_df = pd.DataFrame(data['country']['countries']).T
 		country_df.rename(columns={'label': 'country'}, inplace=True)
 		# Extract continent info from continent csv
-		continent_df = pd.read_csv(CONTINENT_CSV_PATH)
-		region_df = continent_df[['alpha-3', 'region']].set_index('alpha-3')
+		region_df = pd.read_csv(CONTINENT_CSV_PATH, usecols=['alpha-3', 'region'], index_col='alpha-3')
 		gdp_df = gdp_df.join(country_df)
 		gdp_df = gdp_df.join(region_df)
 		transformed_df = gdp_df[['country', '2025', 'region']].copy()
