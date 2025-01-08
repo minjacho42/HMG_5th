@@ -34,12 +34,13 @@ def transform(file_name: str = JSON_FILE):
 		with open(file_name, 'r') as f:
 			data = json.load(f)
 		soup = BeautifulSoup(data['raw_data'], 'html.parser')
-		table_soup = soup.select('table.wikitable')
+		table_soup = soup.select('table.wikitable') # Find a table with class 'wikitable'
 		if len(table_soup) < 1:
 			logger('Transform', 'ERROR: No table found')
 			raise Exception('No table found')
-		table_soup = soup.find('table', {'class': 'wikitable'}) # Find a table with class 'wikitable'
-		rows = table_soup.find_all('tr') # Get all rows in the table
+		if len(table_soup) > 1:
+			logger('Transform', 'WARNNING: Multiple tables found')
+		rows = table_soup[0].find_all('tr') # Get all rows in the table
 		for row in rows:
 			cells = row.find_all('td') # Get all cells in the row
 			if len(cells) > 1: # Cell[0] is country name, cell[1] is GDP from IMF
