@@ -37,22 +37,26 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
         for idx, country, gdp, region in result_100B:
             print(f'{int(idx) + 1:4} | {country:30} | {gdp:8.2f} | {region}')
         print()
-        query_region_list = f"""SELECT DISTINCT Region FROM {table_name} WHERE Region IS NOT NULL"""
-        cursor.execute(query_region_list)
-        result_region_list = cursor.fetchall()
-        query_region_top5_mean = f"""SELECT Region, AVG(GDP_USD_billion) AS Mean_GDP_USD_billion
-                                    FROM (
-                                    SELECT Region, GDP_USD_billion FROM {table_name}
-                                    WHERE Region == ?
+        query_region_top5_mean = f"""
+                                    WITH regionRankTable(Region, GDP_USD_billion, Rank) AS (
+                                    SELECT Region, GDP_USD_billion, ROW_NUMBER() OVER (
+                                    PARTITION BY Region
                                     ORDER BY GDP_USD_billion DESC
-                                    LIMIT 5
+                                    ) AS Rank
+                                    FROM {table_name}
                                     )
+                                    SELECT Region, AVG(GDP_USD_billion) AS Mean_GDP FROM regionRankTable
+                                    WHERE Rank <= 5
+                                    GROUP BY Region
+                                    ORDER BY Mean_GDP DESC
                                     """
         print("\033[31m--- Each region's mean GDP of top 5 country ---\033[0m")
-        for idx, region in enumerate(result_region_list):
-            cursor.execute(query_region_top5_mean, region)
-            region, mean = cursor.fetchall()[0]
-            print(f"""\033[{32 + idx}m{region.upper():8}\033[0m : {mean:.2f}""")
+        cursor.execute(query_region_top5_mean)
+        region_top5_mean = cursor.fetchall()
+        for idx, pair in enumerate(region_top5_mean):
+            region, mean = pair
+            if pd.notna(region):
+                print(f"""\033[{32 + idx}m{region.upper():8}\033[0m : {mean:.2f}""")
     except Exception as e:
         logger('Display-Info-SQL', 'ERROR: ' + str(e))
         raise e
