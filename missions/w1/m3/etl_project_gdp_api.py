@@ -31,15 +31,19 @@ def transform(json_file: str = JSON_FILE):
 		logger('Transform-API', 'start')
 		with open(json_file, 'r') as f: # get extracted data by json
 			data = json.load(f)
+		# Extract GDP DataFrame index = Country Code, columns = year, value = GDP of year
 		gdp_df = pd.DataFrame(data['ngdpd']['values']['NGDPD']).T
+		# Extract Country DataFrame index = Country Code, columns = label, value = Country string
 		country_df = pd.DataFrame(data['country']['countries']).T
+		country_df.rename(columns={'label': 'country'}, inplace=True)
+		# Extract continent info from continent csv
 		continent_df = pd.read_csv(CONTINENT_CSV_PATH)
 		region_df = continent_df[['alpha-3', 'region']].set_index('alpha-3')
 		gdp_df = gdp_df.join(country_df)
 		gdp_df = gdp_df.join(region_df)
-		transformed_df = gdp_df[['label', '2025', 'region']].copy()
-		transformed_df.rename(columns={'2025': 'GDP', 'label': 'country'}, inplace=True)
-		transformed_df.dropna(subset=['country', 'region'], inplace=True)
+		transformed_df = gdp_df[['country', '2025', 'region']].copy()
+		transformed_df.rename(columns={'2025': 'GDP'}, inplace=True)
+		transformed_df.dropna(subset=['country'], inplace=True)
 		transformed_df.sort_values(by='GDP', ascending=False, inplace=True)
 		transformed_df.reset_index(drop=True, inplace=True)
 		logger('Transform-API', 'done')
