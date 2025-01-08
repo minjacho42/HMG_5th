@@ -5,6 +5,9 @@ from etl_project_util import save_raw_data_with_backup, display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
+CONTINENT_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/continents2.csv'
+
+on_memory_loaded_df = None
 
 # Extract gdp information with imf api
 def extract():
@@ -30,7 +33,7 @@ def transform(json_file: str = JSON_FILE):
 			data = json.load(f)
 		gdp_df = pd.DataFrame(data['ngdpd']['values']['NGDPD']).T
 		country_df = pd.DataFrame(data['country']['countries']).T
-		continent_df = pd.read_csv('/Users/admin/HMG_5th/missions/w1/data/continents2.csv')
+		continent_df = pd.read_csv(CONTINENT_CSV_PATH)
 		region_df = continent_df[['alpha-3', 'region']].set_index('alpha-3')
 		gdp_df = gdp_df.join(country_df)
 		gdp_df = gdp_df.join(region_df)
@@ -41,14 +44,19 @@ def transform(json_file: str = JSON_FILE):
 		transformed_df.reset_index(drop=True, inplace=True)
 		logger('Transform-API', 'done')
 		return transformed_df
+	except KeyError as e:
+		logger('Transform-API', 'ERROR: Not Valid RAW Data')
+		raise e
 	except Exception as e:
 		logger('Transform-API', 'ERROR: ' + str(e))
 		raise e
 
 # Load
 def load(df: pd.DataFrame):
+	global on_memory_loaded_df
 	try:
 		logger('Load-API', 'start')
+		on_memory_loaded_df = df.copy()
 		logger('Load-API', 'done')
 	except Exception as e:
 		logger('Load-API', 'ERROR: ' + str(e))
@@ -59,7 +67,7 @@ if __name__ == '__main__':
 		extract()
 		df = transform()
 		load(df)
-		display_info_with_pandas(df)
+		display_info_with_pandas(on_memory_loaded_df)
 	except Exception as e:
 		print(e)
 		exit(1)

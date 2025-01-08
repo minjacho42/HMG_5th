@@ -6,11 +6,14 @@ from etl_project_util import save_raw_data_with_backup, display_info_with_pandas
 
 JSON_FILE = 'Countries_by_GDP.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
+CRAWLING_URL = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
+
+on_memory_loaded_df = None
 
 # Extract gdp information with web scrapping
 def extract():
 	try:
-		url = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
+		url = CRAWLING_URL
 		logger('extract', 'start')
 		response = requests.get(url)
 		html = response.text
@@ -23,12 +26,12 @@ def extract():
 
 # Transform data extracted by web scrapping using beautifulsoup
 # DataFrame columns = GDP, country, region
-def transform():
+def transform(file_name: str = JSON_FILE):
 	try:
 		logger('Transform', 'start')
 		data = {}
 		gdp_dict = {}
-		with open(JSON_FILE, 'r') as f:
+		with open(file_name, 'r') as f:
 			data = json.load(f)
 		soup = BeautifulSoup(data['raw_data'], 'html.parser')
 		table_soup = soup.select('table.wikitable')
@@ -56,8 +59,10 @@ def transform():
 
 # Load
 def load(df: pd.DataFrame):
+	global on_memory_loaded_df
 	try:
 		logger('Load', 'start')
+		on_memory_loaded_df = df.copy()
 		logger('Load', 'done')
 	except Exception as e:
 		logger('Load', 'ERROR: ' + str(e))
@@ -68,7 +73,7 @@ if __name__ == '__main__':
 		extract()
 		df = transform()
 		load(df)
-		display_info_with_pandas(df)
+		display_info_with_pandas(on_memory_loaded_df)
 	except Exception as e:
 		print(e)
 		exit(1)
