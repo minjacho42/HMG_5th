@@ -28,7 +28,7 @@ def extract(end_points: tuple = ('NGDPD', 'countries')):
 		logger('Extract-API', 'start')
 		data = {}
 		for endpoint in end_points:
-			data[endpoint] = requset_get_url(API_BASE_URL, endpoint)
+			data[endpoint] = request_get_url(API_BASE_URL, endpoint)
 		save_raw_data_with_backup(JSON_FILE, data)
 		logger('Extract-API', 'done')
 	except Exception as e:
