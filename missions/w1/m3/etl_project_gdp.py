@@ -32,7 +32,7 @@ def transform(file_name: str = JSON_FILE):
 		data = {}
 		gdp_dict = {}
 		with open(file_name, 'r') as f:
-			data = json.load(f)
+			data = json.load(f)['data']
 		soup = BeautifulSoup(data['raw_data'], 'html.parser')
 		table_soup = soup.select('table.wikitable') # Find a table with class 'wikitable'
 		if len(table_soup) < 1:

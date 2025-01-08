@@ -61,21 +61,23 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
         logger('Display-Info-SQL', 'ERROR: ' + str(e))
         raise e
 
+# If data already exist and data wasn't changed, renew json file's meta data.
+# If data already exist and data changed, rename old data and store new json data.from
+# If data doesn't exist, save current data.
 def save_raw_data_with_backup(file_name, data):
     if os.path.exists(file_name):  # If file exists
         old_data = {}
         with open(file_name, 'r') as f:
-            old_data = json.load(f)
+            old_data_with_meta = json.load(f)
+            old_data = old_data_with_meta['data']
         if old_data == data:  # compare old data and new data
             logger('Extract-Save', 'No update in raw data')
         else: # if old data and new data are different, rename old data.
             os.rename(file_name, file_name.split('.')[0] + datetime.now().strftime('%Y%m%d%H%M%S') + '.json')
             logger('Extract-Save', 'Update raw data')
-            with open(file_name, 'w') as f:
-                json.dump(data, f)
-    else: # If file not exists, save raw data.
-        with open(file_name, 'w') as f:
-            json.dump(data, f)
+    with open(file_name, 'w') as f:
+        data_with_meta = {'data': data, 'meta_data': {'date': datetime.now().strftime('%Y-%B-%d %H:%M:%S')}}
+        json.dump(data_with_meta, f)
 
 # log etl step with msg
 def logger(step: str, msg: str):

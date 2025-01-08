@@ -41,7 +41,7 @@ def transform(json_file: str = JSON_FILE):
 	try:
 		logger('Transform-API', 'start')
 		with open(json_file, 'r') as f: # get extracted data by json
-			data = json.load(f)
+			data = json.load(f)['data']
 		# Extract GDP DataFrame index = Country Code, columns = year, value = GDP of year
 		gdp_df = pd.DataFrame(data['NGDPD']['values']['NGDPD']).T
 		# Extract Country DataFrame index = Country Code, columns = label, value = Country string
