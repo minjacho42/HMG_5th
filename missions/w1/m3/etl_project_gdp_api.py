@@ -6,18 +6,29 @@ from etl_project_util import save_raw_data_with_backup, display_info_with_pandas
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
 CONTINENT_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/continents2.csv'
+API_BASE_URL = 'https://www.imf.org/external/datamapper/api/v1/'
 
 on_memory_loaded_df = None
 
+# Request based on url and endpoint
+def request_get_url(url, endpoint):
+	try:
+		response = requests.get(url + endpoint)
+		if response.status_code == 200:
+			return response.json()
+		else:
+			raise requests.exceptions.RequestException
+	except Exception as e:
+		logger('Request-Get-URL', 'ERROR: ' + str(e))
+		raise e
+
 # Extract gdp information with imf api
-def extract():
+def extract(end_points: tuple = ('NGDPD', 'countries')):
 	try:
 		logger('Extract-API', 'start')
-		ngdpd_url = "https://www.imf.org/external/datamapper/api/v1/NGDPD"
-		country_url = "https://www.imf.org/external/datamapper/api/v1/countries"
-		ngdpd_response = requests.get(ngdpd_url)
-		country_response = requests.get(country_url)
-		data = {'ngdpd':ngdpd_response.json(), 'country':country_response.json()}
+		data = {}
+		for endpoint in end_points:
+			data[endpoint] = requset_get_url(API_BASE_URL, endpoint)
 		save_raw_data_with_backup(JSON_FILE, data)
 		logger('Extract-API', 'done')
 	except Exception as e:
@@ -32,9 +43,9 @@ def transform(json_file: str = JSON_FILE):
 		with open(json_file, 'r') as f: # get extracted data by json
 			data = json.load(f)
 		# Extract GDP DataFrame index = Country Code, columns = year, value = GDP of year
-		gdp_df = pd.DataFrame(data['ngdpd']['values']['NGDPD']).T
+		gdp_df = pd.DataFrame(data['NGDPD']['values']['NGDPD']).T
 		# Extract Country DataFrame index = Country Code, columns = label, value = Country string
-		country_df = pd.DataFrame(data['country']['countries']).T
+		country_df = pd.DataFrame(data['countries']['countries']).T
 		country_df.rename(columns={'label': 'country'}, inplace=True)
 		# Extract continent info from continent csv
 		region_df = pd.read_csv(CONTINENT_CSV_PATH, usecols=['alpha-3', 'region'], index_col='alpha-3')
