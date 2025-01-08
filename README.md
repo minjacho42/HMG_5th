@@ -30,8 +30,7 @@
 * [between](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_6.md)
 * [as](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_6.md)
 * [join](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_6.md)
-* [with(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_7.md)
-* [with(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_8.md)
+* with [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_7.md) [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_8.md)
 * [ROW_NUMBER, RANK, PARTITION BY](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_8.md)
 
 ### Pandas
