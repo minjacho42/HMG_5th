@@ -79,6 +79,16 @@ def save_raw_data_with_backup(file_name, data):
         data_with_meta = {'data': data, 'meta_data': {'date': datetime.now().strftime('%Y-%B-%d %H:%M:%S')}}
         json.dump(data_with_meta, f)
 
+def read_json_file(file_name):
+    try:
+        with open(file_name, 'r') as f:
+            data = json.load(f)
+            print(f'Data Successfully Loaded meta_data:{data['meta_data']}')
+        return data['data']
+    except FileNotFoundError:
+        print(f'File not found: {file_name}')
+        return None
+
 # log etl step with msg
 def logger(step: str, msg: str):
     with open(LOG_FILE, 'a') as file:

@@ -31,17 +31,16 @@ def extract(end_points: tuple = ('NGDPD', 'countries')):
 			data[endpoint] = request_get_url(API_BASE_URL, endpoint)
 		save_raw_data_with_backup(JSON_FILE, data)
 		logger('Extract-API', 'done')
+		return data
 	except Exception as e:
 		logger('Extract-API', 'ERROR: ' + str(e))
 		raise e
 
 # Transform data extracted with imf api and return dataframe
 # DataFrame columns = GDP, country, region
-def transform(json_file: str = JSON_FILE):
+def transform(data: dict):
 	try:
 		logger('Transform-API', 'start')
-		with open(json_file, 'r') as f: # get extracted data by json
-			data = json.load(f)['data']
 		# Extract GDP DataFrame index = Country Code, columns = year, value = GDP of year
 		gdp_df = pd.DataFrame(data['NGDPD']['values']['NGDPD']).T
 		# Extract Country DataFrame index = Country Code, columns = label, value = Country string
@@ -78,7 +77,7 @@ def load(df: pd.DataFrame):
 
 if __name__ == '__main__':
 	try:
-		extract()
+		data = extract()
 		df = transform()
 		load(df)
 		display_info_with_pandas(on_memory_loaded_df)
