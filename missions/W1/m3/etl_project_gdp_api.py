@@ -3,8 +3,8 @@ import pandas as pd
 from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
 
 JSON_FILE = 'Countries_by_GDP_API.json'
-REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
-CONTINENT_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/continents2.csv'
+REGION_CSV_PATH = '../data/region.csv'
+CONTINENT_CSV_PATH = '../data/continents2.csv'
 API_BASE_URL = 'https://www.imf.org/external/datamapper/api/v1/'
 
 on_memory_loaded_df = None

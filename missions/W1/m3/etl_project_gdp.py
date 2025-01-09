@@ -4,7 +4,7 @@ import pandas as pd
 from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
 
 JSON_FILE = 'Countries_by_GDP.json'
-REGION_CSV_PATH = '/Users/admin/HMG_5th/missions/w1/data/region.csv'
+REGION_CSV_PATH = '../data/region.csv'
 CRAWLING_URL = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
 
 on_memory_loaded_df = None

@@ -5,7 +5,7 @@ import etl_project_util
 import argparse
 import pandas as pd
 
-SQL_PATH = '/Users/admin/HMG_5th/missions/w1/data/World_Economies.db'
+SQL_PATH = '../data/World_Economies.db'
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()

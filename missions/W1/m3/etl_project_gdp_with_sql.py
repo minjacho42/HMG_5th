@@ -3,7 +3,7 @@ import sqlite3
 from etl_project_gdp import extract, transform
 from etl_project_util import display_info_with_sqlite, logger
 
-SQL_PATH = '/Users/admin/HMG_5th/missions/w1/data/World_Economies.db'
+SQL_PATH = '../data/World_Economies.db'
 
 def load(df: pd.DataFrame, table_name: str = 'Countries_by_GDP'):
     try:
