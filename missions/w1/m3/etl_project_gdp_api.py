@@ -82,7 +82,7 @@ def load(df: pd.DataFrame):
 if __name__ == '__main__':
 	try:
 		data = extract()
-		df = transform()
+		df = transform(data)
 		load(df)
 		display_info_with_pandas(on_memory_loaded_df)
 	except Exception as e:
