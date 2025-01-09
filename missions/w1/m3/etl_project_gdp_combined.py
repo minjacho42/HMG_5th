@@ -24,9 +24,10 @@ if __name__ == "__main__":
         transform = etl_project_gdp_api.transform
     df = pd.DataFrame()
     if args.raw_json:
-        df = transform(args.raw_json)
+        data = etl_project_util.read_json_file(args.raw_json)
+        df = transform(data)
     else:
-        extract()
-        df = transform()
+        data = extract()
+        df = transform(data)
     load(df, args.table_name)
     etl_project_util.display_info_with_sqlite(SQL_PATH ,table_name=args.table_name)

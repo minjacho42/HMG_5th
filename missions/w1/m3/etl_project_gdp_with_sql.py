@@ -18,8 +18,8 @@ def load(df: pd.DataFrame, table_name: str = 'Countries_by_GDP'):
 
 if __name__ == '__main__':
     try:
-        extract()
-        df = transform()
+        data = extract()
+        df = transform(data)
         load(df)
         display_info_with_sqlite(SQL_PATH)
     except Exception as e:
