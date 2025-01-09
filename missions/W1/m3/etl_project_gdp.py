@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import asyncio
 from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
 
 JSON_FILE = 'Countries_by_GDP.json'
@@ -17,7 +18,6 @@ def extract():
 		response = requests.get(url)
 		html = response.text
 		data = {'raw_data':html}
-		save_raw_data_with_backup(JSON_FILE, data)
 		logger('extract', 'done')
 		return data
 	except Exception as e:
@@ -77,12 +77,17 @@ def load(df: pd.DataFrame):
 		logger('Load', 'ERROR: ' + str(e))
 		raise e
 
+async def main():
+	data = extract()
+	task = asyncio.create_task(save_raw_data_with_backup(JSON_FILE, data))
+	df = transform(data)
+	load(df)
+	display_info_with_pandas(on_memory_loaded_df)
+	await task
+
 if __name__ == '__main__':
 	try:
-		data = extract()
-		df = transform(data)
-		load(df)
-		display_info_with_pandas(on_memory_loaded_df)
+		asyncio.run(main())
 	except Exception as e:
 		print(e)
 		exit(1)

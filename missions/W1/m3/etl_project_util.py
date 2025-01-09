@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import pandas as pd
 import sqlite3
+import asyncio
 
 LOG_FILE = 'etl_project_log.txt'
 
@@ -64,7 +65,7 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
 # If data already exist and data wasn't changed, renew json file's meta data.
 # If data already exist and data changed, rename old data and store new json data.from
 # If data doesn't exist, save current data.
-def save_raw_data_with_backup(file_name, data):
+async def save_raw_data_with_backup(file_name, data):
     if os.path.exists(file_name):  # If file exists
         old_data = {}
         with open(file_name, 'r') as f:
