@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-import json
 from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
 
 JSON_FILE = 'Countries_by_GDP.json'

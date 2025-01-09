@@ -1,4 +1,3 @@
-import json
 import requests
 import pandas as pd
 from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
