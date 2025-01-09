@@ -36,6 +36,11 @@ def extract(end_points: tuple = ('NGDPD', 'countries')):
 		logger('Extract-API', 'ERROR: ' + str(e))
 		raise e
 
+def join_country_region_df(df: pd.DataFrame, country_df: pd.DataFrame, region_df: pd.DataFrame):
+	df = df.join(country_df, how='left')
+	df = df.join(region_df, how='left')
+	return df
+
 # Transform data extracted with imf api and return dataframe
 # DataFrame columns = GDP, country, region
 def transform(data: dict):
@@ -48,8 +53,7 @@ def transform(data: dict):
 		country_df.rename(columns={'label': 'country'}, inplace=True)
 		# Extract continent info from continent csv
 		region_df = pd.read_csv(CONTINENT_CSV_PATH, usecols=['alpha-3', 'region'], index_col='alpha-3')
-		gdp_df = gdp_df.join(country_df)
-		gdp_df = gdp_df.join(region_df)
+		gdp_df = join_country_region_df(gdp_df, country_df, region_df)
 		transformed_df = gdp_df[['country', '2025', 'region']].copy()
 		transformed_df.rename(columns={'2025': 'GDP'}, inplace=True)
 		transformed_df.dropna(subset=['country'], inplace=True)
