@@ -1,6 +1,8 @@
-import requests
 import pandas as pd
-from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
+import asyncio
+from etl_project_logger import logger
+from etl_project_util import display_info_with_pandas, read_json_file
+from extractor import ExtractorWithAPI
 
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '../data/region.csv'
@@ -9,38 +11,12 @@ API_BASE_URL = 'https://www.imf.org/external/datamapper/api/v1/'
 
 on_memory_loaded_df = None
 
-# Request based on url and endpoint
-def request_get_url(url, endpoint):
-	try:
-		response = requests.get(url + endpoint)
-		if response.status_code == 200:
-			return response.json()
-		else:
-			raise requests.exceptions.RequestException
-	except Exception as e:
-		logger('Request-Get-URL', 'ERROR: ' + str(e))
-		raise e
-
-# Extract gdp information with imf api
-def extract(end_points: tuple = ('NGDPD', 'countries')):
-	try:
-		logger('Extract-API', 'start')
-		data = {}
-		for endpoint in end_points:
-			data[endpoint] = request_get_url(API_BASE_URL, endpoint)
-		save_raw_data_with_backup(JSON_FILE, data)
-		logger('Extract-API', 'done')
-		return data
-	except Exception as e:
-		logger('Extract-API', 'ERROR: ' + str(e))
-		raise e
-
 def join_country_region_df(df: pd.DataFrame, country_df: pd.DataFrame, region_df: pd.DataFrame):
 	df = df.join(country_df, how='left')
 	df = df.join(region_df, how='left')
 	return df
 
-# Transform data extracted with imf api and return dataframe
+# Transform data extracted from the IMF API and return a DataFrame
 # DataFrame columns = GDP, country, region
 def transform(data: dict):
 	try:
@@ -78,12 +54,17 @@ def load(df: pd.DataFrame):
 		logger('Load-API', 'ERROR: ' + str(e))
 		raise e
 
+async def main():
+	# Use ExtractorWithAPI to extract data from api
+	extractor_with_api = ExtractorWithAPI(JSON_FILE, API_BASE_URL, ['NGDPD', 'countries'])
+	await extractor_with_api.run()
+	df = transform(read_json_file(JSON_FILE))
+	load(df)
+	display_info_with_pandas(on_memory_loaded_df)
+
 if __name__ == '__main__':
 	try:
-		data = extract()
-		df = transform(data)
-		load(df)
-		display_info_with_pandas(on_memory_loaded_df)
+		asyncio.run(main())
 	except Exception as e:
 		print(e)
 		exit(1)
