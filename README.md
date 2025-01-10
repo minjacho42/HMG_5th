@@ -18,8 +18,9 @@
 
 ### Python
 
-* [asyncio](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_9.md)
-* [aiohttp](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_9.md)
+* asyncio [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_9.md), [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_10.md)
+* aiohttp [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_9.md) [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_10.md)
+* [abc](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_10.md)
 
 * sqlite3
   * [Connection](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_1_3.md)
