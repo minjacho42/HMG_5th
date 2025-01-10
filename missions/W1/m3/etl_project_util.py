@@ -1,14 +1,16 @@
-import os
 import json
-from datetime import datetime
 import pandas as pd
 import sqlite3
-import asyncio
+from extractor import ExtractorWithAPI
+from etl_project_logger import logger
 
-LOG_FILE = 'etl_project_log.txt'
 
+# Display two result with pandas
+# 1. Display Rank, Country, GDP, and Region for countries with GDP greater than 100B in descending order
+# 2. Display the mean GDP of the top 5 countries in each region
 def display_info_with_pandas(df: pd.DataFrame):
     try:
+        # 1
         print("\033[31m--- Country have more than 100B GDP ---\033[0m")
         pd.options.display.float_format = "{:.2f}".format  # 소수점 둘째자리 까지 프린트
         pd.options.display.max_rows = 100  # 최대 row 개수 조정
@@ -16,6 +18,8 @@ def display_info_with_pandas(df: pd.DataFrame):
         for row in df[df['GDP'] >= 100].itertuples():
             print(f'{int(row.Index) + 1:4} | {row.country:30} | {row.GDP:8.2f} | {row.region}')
         print()
+
+        # 2
         print("\033[31m--- Each region's mean GDP of top 5 country ---\033[0m")
         for idx, region in enumerate(df['region'].unique()):
             if pd.notna(region):
@@ -26,10 +30,15 @@ def display_info_with_pandas(df: pd.DataFrame):
         logger('Display-Info', 'ERROR: ' + str(e))
         raise e
 
+# Display two result with SQL query
+# 1. Display Rank, Country, GDP, and Region for countries with GDP greater than 100B in descending order
+# 2. Display the mean GDP of the top 5 countries in each region
 def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'):
     try:
         conn = sqlite3.connect(sql_path)
         cursor = conn.cursor()
+
+        # Query for #1
         query_100B = f"""SELECT * FROM {table_name} WHERE GDP_USD_billion >= 100"""
         cursor.execute(query_100B)
         result_100B = cursor.fetchall()
@@ -38,6 +47,8 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
         for idx, country, gdp, region in result_100B:
             print(f'{int(idx) + 1:4} | {country:30} | {gdp:8.2f} | {region}')
         print()
+
+        # Query for #2
         query_region_top5_mean = f"""
                                     WITH regionRankTable(Region, GDP_USD_billion, Rank) AS (
                                     SELECT Region, GDP_USD_billion, ROW_NUMBER() OVER (
@@ -62,37 +73,18 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
         logger('Display-Info-SQL', 'ERROR: ' + str(e))
         raise e
 
-# If data already exist and data wasn't changed, renew json file's meta data.
-# If data already exist and data changed, rename old data and store new json data.from
-# If data doesn't exist, save current data.
-async def save_raw_data_with_backup(file_name, data):
-    if os.path.exists(file_name):  # If file exists
-        old_data = {}
-        with open(file_name, 'r') as f:
-            old_data_with_meta = json.load(f)
-            old_data = old_data_with_meta['data']
-        if old_data == data:  # compare old data and new data
-            logger('Extract-Save', 'No update in raw data')
-        else: # if old data and new data are different, rename old data.
-            os.rename(file_name, file_name.split('.')[0] + datetime.now().strftime('%Y%m%d%H%M%S') + '.json')
-            logger('Extract-Save', 'Update raw data')
-    with open(file_name, 'w') as f:
-        data_with_meta = {'data': data, 'meta_data': {'date': datetime.now().strftime('%Y-%B-%d %H:%M:%S')}}
-        json.dump(data_with_meta, f)
-
+# Read Json file.
+# If 'broken' field in 'meta_data' of json file is True, raise File broken exception
+# Else, return 'data' field of json file
 def read_json_file(file_name):
     try:
+        data = None
         with open(file_name, 'r') as f:
             data = json.load(f)
             print(f'Data Successfully Loaded meta_data:{data['meta_data']}')
+        if data['meta_data']['broken']:
+            raise ExtractorWithAPI.BrokenEndpointExistError(f'File is broken have to re-extract {data["meta_data"]}')
         return data['data']
     except FileNotFoundError:
         print(f'File not found: {file_name}')
         return None
-
-# log etl step with msg
-def logger(step: str, msg: str):
-    with open(LOG_FILE, 'a') as file:
-        now = datetime.now()
-        timestamp = now.strftime("%Y-%B-%d %H:%M:%S") #formatting the timestamp
-        file.write(f'{timestamp}, [{step.upper()}] {msg}\n')

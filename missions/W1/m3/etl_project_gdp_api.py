@@ -1,8 +1,8 @@
-import requests
 import pandas as pd
 import asyncio
-import aiohttp
-from etl_project_util import save_raw_data_with_backup, display_info_with_pandas, logger
+from etl_project_logger import logger
+from etl_project_util import display_info_with_pandas, read_json_file
+from extractor import ExtractorWithAPI
 
 JSON_FILE = 'Countries_by_GDP_API.json'
 REGION_CSV_PATH = '../data/region.csv'
@@ -11,42 +11,12 @@ API_BASE_URL = 'https://www.imf.org/external/datamapper/api/v1/'
 
 on_memory_loaded_df = None
 
-# Request based on url and endpoint with async and aiohttp
-async def request_get_url(url, endpoint):
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url + endpoint, ssl=False) as response:
-                if response.status == 200:
-                    return await response.json()  # 요청 응답을 비동기적으로 처리
-                else:
-                    response.raise_for_status()
-    except Exception as e:
-        logger('Request-Get-URL', 'ERROR: ' + str(e))
-        raise e
-
-# Extract gdp information with imf api
-async def extract(end_points: tuple = ('NGDPD', 'countries')):
-	try:
-		logger('Extract-API', 'start')
-		data = {}
-		tasks = []
-		for endpoint in end_points:
-			tasks.append(asyncio.create_task(request_get_url(API_BASE_URL, endpoint), name=endpoint))
-		async_results = await asyncio.gather(*tasks)
-		for endpoint, result in zip(end_points, async_results):
-			data[endpoint] = result
-		logger('Extract-API', 'done')
-		return data
-	except Exception as e:
-		logger('Extract-API', 'ERROR: ' + str(e))
-		raise e
-
 def join_country_region_df(df: pd.DataFrame, country_df: pd.DataFrame, region_df: pd.DataFrame):
 	df = df.join(country_df, how='left')
 	df = df.join(region_df, how='left')
 	return df
 
-# Transform data extracted with imf api and return dataframe
+# Transform data extracted from the IMF API and return a DataFrame
 # DataFrame columns = GDP, country, region
 def transform(data: dict):
 	try:
@@ -85,12 +55,12 @@ def load(df: pd.DataFrame):
 		raise e
 
 async def main():
-	data = await extract()
-	task = asyncio.create_task(save_raw_data_with_backup(JSON_FILE, data))
-	df = transform(data)
+	# Use ExtractorWithAPI to extract data from api
+	extractor_with_api = ExtractorWithAPI(JSON_FILE, API_BASE_URL, ['NGDPD', 'countries'])
+	await extractor_with_api.run()
+	df = transform(read_json_file(JSON_FILE))
 	load(df)
 	display_info_with_pandas(on_memory_loaded_df)
-	await task
 
 if __name__ == '__main__':
 	try:
