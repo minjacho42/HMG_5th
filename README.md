@@ -13,18 +13,28 @@
 * [2025.01.10](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
 #### [팀 스크럼, 리뷰](https://valiant-gerbera-c26.notion.site/HMG-DE-5-1-1776c39e2d3d806fa6ded64dafa9c803?pvs=74)
 
+### W2
+#### 개인 회고
+* [2025.01.13](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+
 ## INDEX
 
 ### Data Engineering
 * ETL
   * [ETL Process](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_06.md)
   * [ETL Process 2](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md)
+* [5Vs of Big Data](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+* [Fault Tolerance](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
 
 ### Python
 
 * asyncio [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md), [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
 * aiohttp [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md) [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
 * [abc](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
+* [Multiprocessing](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+  * Pool
+  * Process
+  * Queue
 
 * sqlite3
   * [Connection](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_03.md)
