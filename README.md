@@ -11,12 +11,12 @@
 * [2025.01.08](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_08.md)
 * [2025.01.09](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md)
 * [2025.01.10](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
-* [2025.01.11](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_11.md)
 #### [팀 스크럼, 리뷰](https://valiant-gerbera-c26.notion.site/HMG-DE-5-1-1776c39e2d3d806fa6ded64dafa9c803?pvs=74)
 
 ### W2
 #### 개인 회고
 * [2025.01.13](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+* [2025.01.14](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_14.md)
 
 ## INDEX
 
