@@ -15,8 +15,9 @@
 
 ### W2
 #### 개인 회고
-* [2025.01.13](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
-* [2025.01.14](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_14.md)
+* [2025.01.13](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_13.md)
+* [2025.01.14](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_14.md)
+* [2025.01.14](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_15.md)
 
 ## INDEX
 
@@ -24,15 +25,15 @@
 * ETL
   * [ETL Process](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_06.md)
   * [ETL Process 2](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md)
-* [5Vs of Big Data](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
-* [Fault Tolerance](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+* [5Vs of Big Data](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_13.md)
+* [Fault Tolerance](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_13.md)
 
 ### Python
 
 * asyncio [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md), [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
 * aiohttp [(1)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_09.md) [(2)](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
 * [abc](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_10.md)
-* [Multiprocessing](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w1/25_01_13.md)
+* [Multiprocessing](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w2/25_01_13.md)
   * Pool
   * Process
   * Queue
