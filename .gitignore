@@ -6,3 +6,4 @@
 *.json
 *.txt
 __pycache__
+*.html
