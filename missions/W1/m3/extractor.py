@@ -19,9 +19,24 @@ class AbstractExtractor(ABC):
     def save(self):
         pass
 
-# A concrete implementation of Extractor that scrapes data from a single web URL.
-# Retries the request (`max_tries`) times with timeout.
 class ExtractorWithWeb(AbstractExtractor):
+    """
+    Handles web scraping functionality by performing asynchronous HTTP GET requests to a given URL.
+    Extracts and saves the data to a specified file path in JSON format.
+
+    This class is designed to retry the web scraping operation a specified number of times
+    in case of failures. It leverages aiohttp for asynchronous HTTP requests and aiofiles
+    for non-blocking file I/O operations.
+
+    :ivar _raw_data: Raw data extracted from the URL.
+    :type _raw_data: Optional[str]
+    :ivar __url: Target URL to scrape content from.
+    :type __url: str
+    :ivar __max_tries: Maximum number of retry attempts to fetch the URL.
+    :type __max_tries: int
+    :ivar __timeout: Timeout duration in seconds for HTTP requests.
+    :type __timeout: int
+    """
     def __init__(self, file_path:str, url:str, max_tries:int=3, timeout:int=10):
         super().__init__(file_path)
         self.__url = url
@@ -37,9 +52,13 @@ class ExtractorWithWeb(AbstractExtractor):
             else:
                 response.raise_for_status()
 
-    # Scrapping the website asynchronously.
-    # Retries the request up to `max_tries` times on failure.
     async def run(self):
+        """
+        Performs an asynchronous attempt to retrieve data from the given URL with a specified
+        number of retry attempts in case of failure. If the maximum number of retries is reached
+        and all attempts to retrieve the data fail, an exception will be raised. Upon completion,
+        regardless of success or failure, the function ensures that the result is saved.
+        """
         trial = 1
         try:
             async with aiohttp.ClientSession() as session:
@@ -61,9 +80,13 @@ class ExtractorWithWeb(AbstractExtractor):
         finally: # Save the result regardless of whether the scraping succeeds or fails.
             await self.save()
 
-    # Saves the scraped data (if successful) to the specified file path as a JSON object.
-    # Includes metadata about when the data was saved and whether the operation failed.
     async def save(self):
+        """
+        Asynchronously saves the current object's raw data and metadata to a file.
+        The method collects the raw data and constructs metadata including the
+        current date and time, and a flag indicating whether the raw data is null.
+        These are then written to a specified file in JSON format.
+        """
         data = {
             'data': self._raw_data,
             'meta_data': {
@@ -74,9 +97,32 @@ class ExtractorWithWeb(AbstractExtractor):
         async with aiofiles.open(self._file_path, 'w') as f:
             await f.write(json.dumps(data))
 
-# A concrete implementation of Extractor for fetching data from API endpoints.
-# Handles multiple endpoints, retries failed requests, and stores the results in a JSON file.
 class ExtractorWithAPI(AbstractExtractor):
+    """
+    This class is designed to extract data from APIs by making asynchronous
+    GET requests to the specified endpoints. It retries failed requests
+    up to a configurable number of attempts and stores data in a structured
+    file format. Additionally, it tracks consistently failing endpoints for
+    reporting or further analysis.
+
+    The class is initialized with the essential parameters required for HTTP
+    communication, such as base URL, endpoints, and timeout configurations. Upon
+    execution, it fetches data asynchronously from the endpoints and saves the
+    results along with metadata.
+
+    :ivar _raw_data: Stores the successfully fetched data categorized by endpoints.
+    :type _raw_data: dict
+    :ivar __base_url: Base URL to which the endpoints are appended to form full URLs.
+    :type __base_url: str
+    :ivar __end_points: List of relative API endpoints to fetch data from.
+    :type __end_points: list of str
+    :ivar __max_tries: Maximum number of retry attempts for failed endpoints.
+    :type __max_tries: int
+    :ivar __timeout: Timeout duration in seconds for API requests.
+    :type __timeout: int
+    :ivar __broken_end_points: List of endpoints that failed after all retry attempts.
+    :type __broken_end_points: list of str
+    """
     def __init__(self, file_path:str, base_url:str, end_points:list[str], max_tries:int=3, timeout:int=10):
         super().__init__(file_path)
         self._raw_data = {}
@@ -94,10 +140,14 @@ class ExtractorWithAPI(AbstractExtractor):
             else:
                 response.raise_for_status()
 
-    # Attempts to fetch data from all API endpoints.
-    # Retries failed requests up to `max_tries` times and logs the results.
-    # Tracks endpoints that fail consistently and stores their list in `__broken_end_points`.
     async def run(self):
+        """
+        Executes the asynchronous logic to perform HTTP GET requests against multiple target endpoints and
+        collects their JSON responses. The method retries failed requests up to a predefined maximum number
+        of attempts, and logs warnings for individual endpoint failures. It tracks successfully retrieved
+        data and endpoints that eventually failed after all retry attempts. Finally, it invokes the save
+        method to store the results.
+        """
         try:
             target_end_points = self.__end_points.copy()
             trial = 1
@@ -126,9 +176,15 @@ class ExtractorWithAPI(AbstractExtractor):
         finally:
             await self.save()
 
-    # Saves the API results (_raw_data) to the specified file path as a JSON object.
-    # Includes metadata such as the timestamp, whether any endpoints failed, and broken endpoint details.
     async def save(self):
+        """
+        Save the current state of the object to a file asynchronously.
+
+        This method writes the object's raw data and metadata to a specified file
+        in JSON format. The metadata includes the current date and time, a flag
+        indicating whether there are broken endpoints, and a list of the broken
+        endpoints.
+        """
         data = {
             'data': self._raw_data,
             'meta_data': {

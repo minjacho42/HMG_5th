@@ -5,17 +5,22 @@ def put_item(q):
     items = ['red', 'green', 'blue', 'black']
     for idx, item in enumerate(items):
         print(f'item no: {idx + 1} {item}')
-        q.put_nowait(item)
+        try:
+            q.put_nowait(item)
+        except queue.Full:
+            print('Queue is full')
+            exit(1)
 
 def pop_item(q):
     idx = 0
     while True:
         try:
             item = q.get_nowait()
-            print(f'item no: {idx} {item}')
-            idx += 1
         except queue.Empty:
             break
+        else:
+            print(f'item no: {idx} {item}')
+            idx += 1
 
 if __name__ == '__main__':
     que = mp.Queue()

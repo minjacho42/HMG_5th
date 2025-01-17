@@ -47,6 +47,18 @@ def merge_region_info_df(df: pd.DataFrame, region_df: pd.DataFrame):
 # Transform data extracted by web scrapping using beautifulsoup
 # DataFrame columns = GDP, country, region
 def transform(data: str):
+	"""
+	Transforms the given GDP data string into a structured and processed DataFrame. The function takes GDP data
+	in string format, preprocesses it into a dictionary, converts it into a DataFrame, modifies its structure
+	and data types, and merges it with regional information from a CSV file. The output is a DataFrame where
+	GDP is expressed in billions and is associated with its respective regions.
+
+	:param data: Raw GDP data in string format.
+	:type data: str
+	:return: A DataFrame with the processed GDP per country and associated regional information.
+	:rtype: pandas.DataFrame
+	:raises Exception: If any error occurs during the transformation process.
+	"""
 	try:
 		logger('Transform', 'start')
 		gdp_dict = preprocess_using_bs4(data)
@@ -64,6 +76,15 @@ def transform(data: str):
 
 # Load
 def load(df: pd.DataFrame):
+	"""
+	Loads a DataFrame into memory. The method creates an in-memory copy of the input DataFrame
+	and assigns it to the global variable `on_memory_loaded_df`. It logs the start, completion,
+	and any errors encountered during the process.
+
+	:param df: A pandas DataFrame that is to be loaded into memory.
+	:type df: pd.DataFrame
+	:return: None
+	"""
 	global on_memory_loaded_df
 	try:
 		logger('Load', 'start')
