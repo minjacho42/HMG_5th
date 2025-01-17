@@ -77,6 +77,21 @@ def display_info_with_sqlite(sql_path: str, table_name: str = 'Countries_by_GDP'
 # If 'broken' field in 'meta_data' of json file is True, raise File broken exception
 # Else, return 'data' field of json file
 def read_json_file(file_name):
+    """
+    Reads a JSON file specified by the file_name parameter and returns the "data" portion
+    of the JSON object. The function also validates whether the metadata in the file indicates
+    a broken endpoint or not. If the file contains a 'meta_data' section with the 'broken' flag
+    set to True, the function raises a custom error indicating the file needs re-extraction.
+
+    Errors encountered during file operations such as file not existing are handled
+    internally, logging relevant information without terminating execution.
+
+    :param file_name: Path to the JSON file to be read
+    :type file_name: str
+    :return: The 'data' dictionary from the JSON file if read successfully; otherwise, None.
+    :rtype: dict | None
+    :raises BrokenEndpointExistError: If the file contains a 'meta_data' section with the 'broken' flag set to True.
+    """
     try:
         data = None
         with open(file_name, 'r') as f:

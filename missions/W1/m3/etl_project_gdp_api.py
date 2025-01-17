@@ -16,9 +16,30 @@ def join_country_region_df(df: pd.DataFrame, country_df: pd.DataFrame, region_df
 	df = df.join(region_df, how='left')
 	return df
 
-# Transform data extracted from the IMF API and return a DataFrame
-# DataFrame columns = GDP, country, region
 def transform(data: dict):
+	"""
+	Transforms raw GDP and country data into a structured DataFrame with selected columns
+	and sorted entries. The transformation includes extracting GDP and country information,
+	joining with region data, and preparing a final DataFrame by adding columns such as
+	country, 2025 GDP, and region, after necessary cleaning and sorting.
+
+	:param data: A dictionary containing raw data for GDP and countries. The dictionary is
+	    expected to have the following keys and sub-structure:
+	    - NGDPD: Dictionary that contains a nested dictionary with key 'values'.
+	              Inside 'values', another dictionary keyed by 'NGDPD' provides
+	              the GDP data in the format suitable for creating a DataFrame.
+	    - countries: Dictionary that contains another nested dictionary with key
+	                 'countries', which provides country metadata such as labels.
+
+	:return: A pandas DataFrame with the following columns:
+	    - country: Country name as a string extracted from the raw data.
+	    - GDP: GDP for the year 2025 as extracted and transformed from the raw data.
+	    - region: Geographic region information extracted by merging with external data.
+
+	:raises KeyError: Raised if any expected keys or nested data structures are not found
+	    in the input dictionary.
+	:raises Exception: Raised to handle any other unforeseen errors during data processing.
+	"""
 	try:
 		logger('Transform-API', 'start')
 		# Extract GDP DataFrame index = Country Code, columns = year, value = GDP of year
@@ -45,6 +66,16 @@ def transform(data: dict):
 
 # Load
 def load(df: pd.DataFrame):
+	"""
+	Loads a given pandas DataFrame into memory by creating a copy of it and assigning
+	it to the global variable `on_memory_loaded_df`. Logs the start and completion
+	status of the operation. In case of an error, logs the error message and re-raises
+	the exception.
+
+	:param df: The pandas DataFrame to be loaded into memory.
+	:type df: pd.DataFrame
+	:return: None
+	"""
 	global on_memory_loaded_df
 	try:
 		logger('Load-API', 'start')
