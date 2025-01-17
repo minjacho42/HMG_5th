@@ -7,14 +7,14 @@ def process_task(tasks_to_accomplish, tasks_that_are_done, proc_id):
     완벽히 try except를 분리하기 위해서는 nested try가 발생하기에
     코드의 가독성을 위해서 아래와 같이 작성.
     """
-    while True:
+    while not tasks_to_accomplish.empty():
         try:
             task = tasks_to_accomplish.get_nowait()
             print(f'Task no {task}')
             time.sleep(0.5)
             tasks_that_are_done.put_nowait((task, proc_id))
         except queue.Empty:
-            exit(0)
+            continue
         except queue.Full:
             print('Queue is full')
             exit(1)
@@ -37,10 +37,10 @@ if __name__ == '__main__':
     # while not tasks_that_are_done.empty():
     #     task_no, proc_id = tasks_that_are_done.get_nowait()
     #     print(f'Task no {task_no} is done by Process-{proc_id}')
-    while True:
+    while not tasks_that_are_done.empty():
         try:
             task_no, proc_id = tasks_that_are_done.get_nowait()
         except queue.Empty:
-            break
+            continue
         else:
             print(f'Task no {task_no} is done by Process-{proc_id}')
