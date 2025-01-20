@@ -1,0 +1,15 @@
+services:
+  hadoop:
+    build:
+      context: .  # 현재 디렉토리에서 Dockerfile을 가져옴
+    container_name: hadoop-container  # 컨테이너 이름
+    ports:
+      - "9870:9870"  # NameNode UI 포트
+      - "9864:9864"  # DataNode UI 포트
+      - "9000:9000"  # HDFS 포트
+      - "8088:8088"  # ResourceManager 포트
+      - "22:22"      # SSH 포트
+    volumes:
+      - ./volume/dfs/name:/hadoop/dfs/name  # 호스트와 컨테이너 볼륨 연결
+      - ./volume/dfs/data:/hadoop/dfs/data  # 호스트와 컨테이너 볼륨 연결
+    restart: always  # 컨테이너가 중지될 경우 자동 재시작
