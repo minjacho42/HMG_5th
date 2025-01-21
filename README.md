@@ -24,6 +24,7 @@
 ### W3
 #### 개인 회고
 * [2025.01.20](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w3/25_01_20.md)
+* [2025.01.21](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w3/25_01_21.md)
 
 ## INDEX
 
