@@ -56,11 +56,6 @@ RUN chmod +x /home/hadoop/init.sh && chown hadoop:hadoop /home/hadoop/init.sh
 RUN mkdir -p /hadoop/dfs/name /hadoop/dfs/data &&\
     chown -R hadoop:hadoop /hadoop/dfs/name /hadoop/dfs/data
 
-# hadoop user도 java를 사용할 수 있도록 변경.
-USER hadoop
-ENV JAVA_HOME=/usr/local/openjdk-8
-
-USER root
 # 포트 오픈 (NameNode, DataNode, ResourceManager 등)
 EXPOSE 9870 8088 9000 9864 22
 
