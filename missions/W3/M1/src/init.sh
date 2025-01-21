@@ -3,9 +3,6 @@
 # SSH 서비스 시작 (root 권한으로 실행)
 service ssh start
 
-# 데이터 디렉토리 권한 설정
-chown -R hadoop:hadoop /hadoop/dfs/name /hadoop/dfs/data
-
 # hadoop 사용자로 전환
 su - hadoop <<EOF
 

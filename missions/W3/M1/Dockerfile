@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y wget tar ssh rsync sudo && \
 
 arg HADOOP_USER_PWD
 
-# hadoop 사용자 생성 및 디렉토리 설정 (passwd가 명시됨. 보안상 이슈 발생 가능. 수정 필요)
+# hadoop 사용자 생성 및 디렉토리 설정
 RUN useradd -m -s /bin/bash hadoop && \
     echo "hadoop:${HADOOP_USER_PWD}" | chpasswd && \
     mkdir -p /home/hadoop/.ssh && \
