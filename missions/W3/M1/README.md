@@ -1,5 +1,17 @@
 # Single Node Cluster Hadoop
 
+해당 Dockerfile은 hadoop을 도커로 실행시켜준다. <br>
+이때, root user로 hadoop을 실행하면 보안상의 문제가 생길 수 있기에,<br>
+```hadoop```이라는 유저를 만들어서 해당 유저로 실행하게 된다. <br>
+hadoop 유저의 패스워드를 설정하기 위해, .env파일이 요구된다.
+
+```.env``` 파일은 이와 같은 구조로, ```docker-compose.yml```과 같은 위치의 디렉토리에 있어야 된다.
+
+> **.env**
+>```
+>HADOOP_USER_PWD=<password>
+>```
+
 ## Docker compose & container 실행 명령어
 
 ### Hadoop service 시작하기

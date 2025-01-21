@@ -2,6 +2,8 @@ services:
   hadoop:
     build:
       context: .  # 현재 디렉토리에서 Dockerfile을 가져옴
+      args:
+        HADOOP_USER_PWD: ${HADOOP_USER_PWD}
     container_name: hadoop-container  # 컨테이너 이름
     ports:
       - "9870:9870"  # NameNode UI 포트

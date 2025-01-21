@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# SSH 서비스 시작 (root 권한으로 실행)
 service ssh start
 
+# 데이터 디렉토리 권한 설정
+chown -R hadoop:hadoop /hadoop/dfs/name /hadoop/dfs/data
+
+# hadoop 사용자로 전환
+su - hadoop <<EOF
+
 # NameNode 포맷 (최초 실행 시에만)
-# -d 명령어는 directory가 있는지, -z 명령어는 문자열이 비어있는지 확인.
 if [ ! -d "/hadoop/dfs/name" ] || [ -z "$(ls -A /hadoop/dfs/name)" ]; then
     echo "Formatting NameNode..."
     $HADOOP_HOME/bin/hdfs namenode -format -force
@@ -11,8 +17,11 @@ else
     echo "NameNode already formatted. Skipping format."
 fi
 
-# HDFS 시작
+# HDFS 서비스 시작
+echo "Starting HDFS services..."
 $HADOOP_HOME/sbin/start-dfs.sh
+
+EOF
 
 # 포그라운드 유지 및 로그 출력
 tail -f $HADOOP_HOME/logs/*.log
