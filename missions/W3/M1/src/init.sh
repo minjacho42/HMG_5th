@@ -3,6 +3,7 @@
 service ssh start
 
 # NameNode 포맷 (최초 실행 시에만)
+# -d 명령어는 directory가 있는지, -z 명령어는 문자열이 비어있는지 확인.
 if [ ! -d "/hadoop/dfs/name" ] || [ -z "$(ls -A /hadoop/dfs/name)" ]; then
     echo "Formatting NameNode..."
     $HADOOP_HOME/bin/hdfs namenode -format -force

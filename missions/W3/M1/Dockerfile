@@ -32,10 +32,7 @@ COPY conf/core-site.xml $HADOOP_CONF_DIR/core-site.xml
 COPY conf/hdfs-site.xml $HADOOP_CONF_DIR/hdfs-site.xml
 COPY conf/mapred-site.xml $HADOOP_CONF_DIR/mapred-site.xml
 
-
-# 네임노드 및 데이터 디렉토리 생성
-RUN mkdir -p /hadoop/dfs/name /hadoop/dfs/data
-
+# Java 실행 환경변수 hadoop에 설정.
 RUN echo "export JAVA_HOME=$JAVA_HOME" >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 
 # 포트 오픈 (NameNode, DataNode, ResourceManager 등)

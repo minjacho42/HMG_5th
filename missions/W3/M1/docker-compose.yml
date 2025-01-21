@@ -10,6 +10,10 @@ services:
       - "8088:8088"  # ResourceManager 포트
       - "22:22"      # SSH 포트
     volumes:
-      - ./volume/dfs/name:/hadoop/dfs/name  # 호스트와 컨테이너 볼륨 연결
-      - ./volume/dfs/data:/hadoop/dfs/data  # 호스트와 컨테이너 볼륨 연결
+      - hdfs-name-node:/hadoop/dfs/name  # 호스트와 컨테이너 볼륨 연결
+      - hdfs-data-node:/hadoop/dfs/data  # 호스트와 컨테이너 볼륨 연결
     restart: always  # 컨테이너가 중지될 경우 자동 재시작
+
+volumes:
+  hdfs-name-node:
+  hdfs-data-node:

@@ -1,15 +1,21 @@
 <configuration>
     <!-- HDFS의 기본 파일 시스템 주소 -->
+    <!-- 0.0.0.0으로 모든 ip 주소에서 접근 가능하도록 변경 -->
     <property>
         <name>fs.defaultFS</name>
         <value>hdfs://0.0.0.0:9000</value>
     </property>
+
+    <!-- 웹에서 데이터를 업로드할 때 필요. -->
+    <!-- Docker에서 container 간의 통신을 진행할 경우에 필요.-->
     <property>
         <name>dfs.client.use.datanode.hostname</name>
         <value>true</value>
     </property>
+
     <property>
         <name>dfs.datanode.hostname</name>
         <value>localhost</value>
     </property>
+
 </configuration>

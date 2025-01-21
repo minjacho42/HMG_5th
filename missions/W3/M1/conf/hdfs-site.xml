@@ -16,18 +16,26 @@
         <name>dfs.datanode.data.dir</name>
         <value>file:///hadoop/dfs/data</value>
     </property>
+
+    <!-- Web으로 hdfs 접근 가능하게 설정 -->
     <property>
         <name>dfs.webhdfs.enabled</name>
         <value>true</value>
     </property>
+
+    <!-- Web으로 hdfs 접근 가능하게 설정 -->
     <property>
         <name>dfs.namenode.http-address</name>
         <value>0.0.0.0:9870</value>
     </property>
+
+    <!-- Web으로 hdfs 접근 가능하게 설정 -->
     <property>
         <name>dfs.datanode.http.address</name>
         <value>0.0.0.0:9864</value>
     </property>
+
+    <!-- Web에서 접근하는 사용자들도 업로드 가능하게 변경 -->
     <property>
         <name>dfs.permissions.enabled</name>
         <value>false</value>
