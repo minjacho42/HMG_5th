@@ -13,9 +13,4 @@
         <value>true</value>
     </property>
 
-<!--    <property>-->
-<!--        <name>dfs.datanode.hostname</name>-->
-<!--        <value>${HADOOP_DATANODE_HOSTNAME}</value>-->
-<!--    </property>-->
-
 </configuration>

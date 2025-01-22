@@ -1,7 +1,0 @@
-<configuration>
-    <!-- MapReduce 실행 프레임워크 설정 -->
-    <property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
-    </property>
-</configuration>

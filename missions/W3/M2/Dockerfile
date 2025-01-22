@@ -45,6 +45,7 @@ COPY ./conf/core-site.xml $HADOOP_CONF_DIR/core-site.xml
 COPY ./conf/hdfs-site.xml $HADOOP_CONF_DIR/hdfs-site.xml
 COPY ./conf/yarn-site.xml $HADOOP_CONF_DIR/yarn-site.xml
 COPY ./conf/mapred-site.xml $HADOOP_CONF_DIR/mapred-site.xml
+COPY ./conf/workers $HADOOP_HOME/etc/hadoop/workers
 
 # Java 실행 환경 변수 설정
 RUN echo "export JAVA_HOME=$JAVA_HOME" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh && \
@@ -60,6 +61,6 @@ RUN mkdir -p /hadoop/dfs/name /hadoop/dfs/data &&\
     chown -R hadoop:hadoop /hadoop/dfs/name /hadoop/dfs/data
 
 # 포트 오픈 (NameNode, DataNode, ResourceManager 등)
-EXPOSE 9870 8088 9000 9864 22 8042 8032 8031 8030
+EXPOSE 9870 8088
 
 ENTRYPOINT ["/home/hadoop/init.sh"]
