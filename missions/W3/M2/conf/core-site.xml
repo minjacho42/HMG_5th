@@ -13,4 +13,17 @@
         <value>true</value>
     </property>
 
+
+    <!-- 임시 디렉터리 -->
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/hadoop/tmp</value>
+    </property>
+
+    <!-- 파일 읽기/쓰기 시 버퍼 크기 -->
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+    </property>
+
 </configuration>

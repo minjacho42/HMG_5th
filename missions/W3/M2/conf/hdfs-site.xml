@@ -40,4 +40,11 @@
         <name>dfs.permissions.enabled</name>
         <value>false</value>
     </property>
+
+
+    <!-- HDFS 기본 블록 크기 -->
+    <property>
+        <name>dfs.blocksize</name>
+        <value>134217728</value> <!-- 128 MB -->
+    </property>
 </configuration>

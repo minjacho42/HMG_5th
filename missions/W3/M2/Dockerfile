@@ -13,7 +13,9 @@ arg HADOOP_USER_PWD
 RUN useradd -m -s /bin/bash hadoop && \
     echo "hadoop:${HADOOP_USER_PWD}" | chpasswd && \
     mkdir -p /home/hadoop/.ssh && \
-    chown -R hadoop:hadoop /home/hadoop
+    mkdir -p /hadoop && \
+    chown -R hadoop:hadoop /home/hadoop && \
+    chown -R hadoop:hadoop /hadoop
 
 # Hadoop 설치
 COPY ./src/hadoop-3.4.1.tar.gz .
