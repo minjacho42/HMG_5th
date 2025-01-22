@@ -6,9 +6,6 @@ service ssh start
 if [ "$HADOOP_DATANODE_HOSTNAME" = "master" ]; then
     echo "This is the master node. Proceeding with NameNode setup..."
 
-    # hadoop 사용자로 전환
-    su - hadoop <<EOF
-
     # NameNode 포맷 (최초 실행 시에만)
     if [ ! -d "/hadoop/dfs/name" ] || [ -z "$(ls -A /hadoop/dfs/name)" ]; then
         echo "Formatting NameNode..."
@@ -17,13 +14,11 @@ if [ "$HADOOP_DATANODE_HOSTNAME" = "master" ]; then
         echo "NameNode already formatted. Skipping format."
     fi
 
-    # HDFS 서비스 시작
+    # HDFS 및 YARN 서비스 시작
     echo "Starting HDFS services..."
     $HADOOP_HOME/sbin/start-dfs.sh
+    echo "Starting YARN services..."
     $HADOOP_HOME/sbin/start-yarn.sh
-
-EOF
-
 else
     echo "This is not the master node. Skipping NameNode setup."
 fi

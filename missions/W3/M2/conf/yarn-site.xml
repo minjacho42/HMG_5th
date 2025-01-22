@@ -29,4 +29,16 @@
         <name>yarn.scheduler.minimum-allocation-mb</name>
         <value>1024</value>
     </property>
+    <property>
+        <name>yarn.nodemanager.log-dirs</name>
+        <value>/tmp/logs</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.remote-app-log-dir</name>
+        <value>/tmp/logs</value>
+    </property>
+    <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+</property>
 </configuration>
