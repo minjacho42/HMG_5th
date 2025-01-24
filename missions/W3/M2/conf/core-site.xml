@@ -3,7 +3,7 @@
     <!-- 0.0.0.0으로 모든 ip 주소에서 접근 가능하도록 변경 -->
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://0.0.0.0:9000</value>
+        <value>hdfs://master:9000</value>
     </property>
 
     <!-- 웹에서 데이터를 업로드할 때 필요. -->
@@ -13,9 +13,17 @@
         <value>true</value>
     </property>
 
+
+    <!-- 임시 디렉터리 -->
     <property>
-        <name>dfs.datanode.hostname</name>
-        <value>localhost</value>
+        <name>hadoop.tmp.dir</name>
+        <value>/hadoop/tmp</value>
+    </property>
+
+    <!-- 파일 읽기/쓰기 시 버퍼 크기 -->
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
     </property>
 
 </configuration>
