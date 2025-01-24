@@ -2,7 +2,7 @@
     <!-- 블록 복제본 수 (단일 노드에서는 1로 설정) -->
     <property>
         <name>dfs.replication</name>
-        <value>1</value>
+        <value>2</value>
     </property>
 
     <!-- 네임노드 데이터 저장 디렉토리 -->
@@ -39,5 +39,12 @@
     <property>
         <name>dfs.permissions.enabled</name>
         <value>false</value>
+    </property>
+
+
+    <!-- HDFS 기본 블록 크기 -->
+    <property>
+        <name>dfs.blocksize</name>
+        <value>134217728</value> <!-- 128 MB -->
     </property>
 </configuration>

@@ -1,0 +1,56 @@
+version: "3"
+services:
+  master:
+    build:
+      context: .
+      args:
+        HADOOP_USER_PWD: ${HADOOP_USER_PWD}
+    environment:
+      - HADOOP_DATANODE_HOSTNAME=master
+    hostname:
+      master
+    ports:
+      - "9870:9870" # HDFS NameNode UI
+      - "8088:8088" # YARN ResourceManager UI
+    networks:
+      - hadoop-network
+    volumes:
+      - hdfs-name-node:/hadoop/dfs/name
+  worker1:
+    build:
+      context: .
+      args:
+        HADOOP_USER_PWD: ${HADOOP_USER_PWD}
+    environment:
+      - HADOOP_DATANODE_HOSTNAME=worker1
+    hostname:
+      worker1
+    depends_on:
+      - master
+    networks:
+      - hadoop-network
+    volumes:
+      - hdfs-data-node1:/hadoop/dfs/data
+  worker2:
+    build:
+      context: .
+      args:
+        HADOOP_USER_PWD: ${HADOOP_USER_PWD}
+    environment:
+      - HADOOP_DATANODE_HOSTNAME=worker2
+    hostname:
+      worker2
+    depends_on:
+      - master
+    networks:
+      - hadoop-network
+    volumes:
+      - hdfs-data-node2:/hadoop/dfs/data
+networks:
+  hadoop-network:
+    driver: bridge
+
+volumes:
+  hdfs-name-node:
+  hdfs-data-node1:
+  hdfs-data-node2:

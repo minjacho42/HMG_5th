@@ -1,0 +1,32 @@
+<configuration>
+    <!-- MapReduce 실행 프레임워크 설정 -->
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
+    </property>
+
+
+    <!-- JobTracker 호스트 및 포트 -->
+    <property>
+        <name>mapreduce.job.tracker</name>
+        <value>master:10020</value>
+    </property>
+
+    <!-- Map 출력 정렬 시 메모리 사용량 -->
+    <property>
+        <name>mapreduce.task.io.sort.mb</name>
+        <value>256</value>
+    </property>
+</configuration>
