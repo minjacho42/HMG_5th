@@ -1,0 +1,3 @@
+*.tgz
+volume
+.env

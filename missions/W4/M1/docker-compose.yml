@@ -1,0 +1,39 @@
+version: "3"
+services:
+  spark-master:
+    build:
+      context: .
+    hostname:
+      spark-master
+    user: "spark"
+    entrypoint: ["/opt/spark/sbin/start-master.sh"]
+    ports:
+      - "8080:8080" # Spark Master Web UI
+      - "7077:7077" # Spark Master Port
+    networks:
+      - spark-network
+  spark-worker1:
+    build:
+      context: .
+    hostname:
+      spark-worker1
+    user: "spark"
+    entrypoint: [ "/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
+  spark-worker2:
+    build:
+      context: .
+    hostname:
+      spark-worker2
+    user: "spark"
+    entrypoint: [ "/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
+networks:
+  spark-network:
+    driver: bridge
