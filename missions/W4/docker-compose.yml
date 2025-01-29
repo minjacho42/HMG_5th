@@ -10,6 +10,7 @@ services:
     ports:
       - "8080:8080" # Spark Master Web UI
       - "7077:7077" # Spark Master Port
+      - "4040:4040" # Detailed Spark info
     networks:
       - spark-network
     volumes:
