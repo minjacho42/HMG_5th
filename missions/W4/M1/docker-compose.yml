@@ -12,6 +12,8 @@ services:
       - "7077:7077" # Spark Master Port
     networks:
       - spark-network
+    volumes:
+      - ./share:/opt/spark/work-dir/share
   spark-worker1:
     build:
       context: .
@@ -23,6 +25,8 @@ services:
       - spark-master
     networks:
       - spark-network
+    volumes:
+      - ./share:/opt/spark/work-dir/share
   spark-worker2:
     build:
       context: .
@@ -34,6 +38,8 @@ services:
       - spark-master
     networks:
       - spark-network
+    volumes:
+      - ./share:/opt/spark/work-dir/share
 networks:
   spark-network:
     driver: bridge

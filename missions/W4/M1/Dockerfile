@@ -12,6 +12,9 @@ RUN mkdir -p /opt/spark;\
     touch /opt/spark/RELEASE;\
     chown -R spark:spark /opt/spark;
 
+RUN mkdir -p /home/spark &&\
+    chown -R spark:spark /home/spark
+
 COPY ./src/spark-3.5.4-bin-hadoop3.tgz ./spark.tgz
 RUN tar -xf spark.tgz --strip-components=1 &&\
     chown -R spark:spark . &&\
@@ -22,4 +25,4 @@ ENV SPARK_HOME=/opt/spark
 ENV PATH=$SPARK_HOME/bin:$PATH
 ENV SPARK_NO_DAEMONIZE=1
 
-WORKDIR /opt/spark/workd-dir
+WORKDIR /opt/spark/work-dir
