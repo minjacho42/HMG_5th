@@ -15,7 +15,7 @@ RUN mkdir -p /opt/spark;\
 RUN mkdir -p /home/spark &&\
     chown -R spark:spark /home/spark
 
-COPY ./src/spark-3.5.4-bin-hadoop3.tgz ./spark.tgz
+COPY src/spark-3.5.4-bin-hadoop3.tgz ./spark.tgz
 RUN tar -xf spark.tgz --strip-components=1 &&\
     chown -R spark:spark . &&\
     rm -rf spark.tgz &&\
