@@ -3,3 +3,4 @@ volume
 .env
 nyc_taxi_data
 output
+*.csv
