@@ -34,6 +34,7 @@
 * [2025.01.28](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_28.md)
 * [2025.01.29](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_29.md)
 * [2025.01.30](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_30.md)
+* [2025.01.31](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_31.md)
 
 ## INDEX
 
