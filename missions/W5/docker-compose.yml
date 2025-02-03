@@ -11,6 +11,7 @@ services:
       - "8080:8080" # Spark Master Web UI
       - "7077:7077" # Spark Master Port
       - "4040:4040" # Detailed Spark info
+      - "18080:18080" # Spark History Server
     networks:
       - spark-network
     volumes:
@@ -21,7 +22,7 @@ services:
     hostname:
       spark-worker1
     user: "spark"
-    entrypoint: [ "/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    entrypoint: ["/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
     depends_on:
       - spark-master
     networks:

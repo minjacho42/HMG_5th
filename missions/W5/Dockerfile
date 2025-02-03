@@ -10,7 +10,9 @@ RUN mkdir -p /opt/spark;\
     mkdir -p /opt/spark/work-dir;\
     chmod g+w /opt/spark/work-dir;\
     touch /opt/spark/RELEASE;\
-    chown -R spark:spark /opt/spark;
+    chown -R spark:spark /opt/spark;\
+    mkdir -p /tmp/spark-events;\
+    chown -R spark:spark /tmp/spark-events
 
 RUN mkdir -p /home/spark &&\
     chown -R spark:spark /home/spark
