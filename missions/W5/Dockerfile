@@ -4,6 +4,10 @@ WORKDIR /spark
 
 ARG spark_uid=185
 RUN useradd --uid=${spark_uid} spark
+
+RUN apt update && apt install -y python3 python3-pip
+RUN apt-get update && apt-get install -y supervisor
+RUN pip install ipykernel pyspark
 RUN mkdir -p /opt/spark;\
     mkdir /opt/spark/python;\
     mkdir -p /opt/spark/examples;\
@@ -28,3 +32,5 @@ ENV PATH=$SPARK_HOME/bin:$PATH
 ENV SPARK_NO_DAEMONIZE=1
 
 WORKDIR /opt/spark/work-dir
+COPY src/supervisord.conf .
+COPY M2/nyc_taxi_analysis.py .

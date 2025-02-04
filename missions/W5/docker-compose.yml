@@ -6,12 +6,16 @@ services:
     hostname:
       spark-master
     user: "spark"
-    entrypoint: ["/opt/spark/sbin/start-master.sh"]
+    entrypoint:
+      - "supervisord"
+      - "-c"
+      - "/opt/spark/work-dir/supervisord.conf"
     ports:
       - "8080:8080" # Spark Master Web UI
       - "7077:7077" # Spark Master Port
       - "4040:4040" # Detailed Spark info
       - "18080:18080" # Spark History Server
+      - "22:22"
     networks:
       - spark-network
     volumes:
