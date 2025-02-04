@@ -39,6 +39,7 @@
 ### W4
 #### 개인 회고
 * [2025.02.03](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_03.md)
+* [2025.02.04](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_04.md)
 ## INDEX
 
 ### Data Engineering
