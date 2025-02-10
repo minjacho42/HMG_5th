@@ -36,13 +36,16 @@
 * [2025.01.30](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_30.md)
 * [2025.01.31](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w4/25_01_31.md)
 
-### W4
+### W5
 #### 개인 회고
 * [2025.02.03](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_03.md)
 * [2025.02.04](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_04.md)
 * [2025.02.05](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_05.md)
 * [2025.02.06](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_06.md)
 * [2025.02.07](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w5/25_02_07.md)
+### W6
+#### 개인 회고
+* [2025.02.10](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w6/25_02_10.md)
 ## INDEX
 
 ### Data Engineering
