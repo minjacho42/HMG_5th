@@ -52,6 +52,7 @@
 ### W7
 #### 개인 회고
 * [2025.02.17](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w7/25_02_17.md)
+* [2025.02.18](https://github.com/minjacho42/HMG_5th/blob/master/DailyRetrospective/w7/25_02_18.md)
 ## INDEX
 
 ### Data Engineering
